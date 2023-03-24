@@ -1,0 +1,23 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  EC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: "ami-0c55b159cbfafe1f0"
+      InstanceType: "t2.micro"
+      KeyName: "your_key_pair"
+      SecurityGroupIds:
+        - "sg-0123456789abcdef" # replace with your own security group ID
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          echo "Hello World!" > /var/www/html/index.html
+          yum update -y
+          yum install -y httpd
+          systemctl start httpd
+          systemctl enable httpd
+  S3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: "your-bucket-name" # replace with your own bucket name
